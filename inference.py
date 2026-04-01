@@ -99,9 +99,9 @@ def predict_image(model, image_path):
 
     bin_logit, sub_logits = apply_tta(model, x)
 
-    # Binary decision
-    bin_prob = torch.sigmoid(bin_logit).item()
-    is_defect = bin_prob > 0  # threshold already tuned to 0
+    # Binary decision — compare raw logit against tuned threshold
+    bin_logit_val = bin_logit.item()
+    is_defect = bin_logit_val > -0.152  # best_threshold from training sweep
 
     if not is_defect:
         return "good"
